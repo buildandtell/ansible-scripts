@@ -1,7 +1,7 @@
 ---
 # file: /roles/common/tasks/main.yml
 
-- name: 'Update repository lists'
+- name: 'Update apt cache'
   apt:
     update_cache: yes
 

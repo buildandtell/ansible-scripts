@@ -6,8 +6,7 @@
   become: yes
   roles:
     - { role: 'common' }
-      #- { role: 'users' }
-      #- { role: 'email' }
+    - { role: 'email' }
       #- { role: 'fail2ban' }
       #- { role: 'sslsetup' }
       #- { role: 'php' }
