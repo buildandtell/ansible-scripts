@@ -1,0 +1,22 @@
+---
+- name: Install buildandtell server for website, wiki, mastodon, forum and more
+  hosts: '{{ env }}'
+  remote_user: ubuntu
+  gather_facts: no
+  become: yes
+  roles:
+    - { role: 'common' }
+      #- { role: 'users' }
+      #- { role: 'email' }
+      #- { role: 'fail2ban' }
+      #- { role: 'sslsetup' }
+      #- { role: 'php' }
+      #- { role: 'postgres' }
+      #- { role: 'redis' }
+      #- { role: 'ruby' }
+      #- { role: 'nginx' }
+      #- { role: 'website' }
+      #- { role: 'wiki' }
+      #- { role: 'discourse' }
+      #- { role: 'mastodon' }
+      #- { role: 'monitoring' }

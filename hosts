@@ -1,4 +1,4 @@
-dev_machine ansible_host=13.59.81.148 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/buildandtell1.pem
+dev_machine ansible_host=13.59.81.148
 
 [development]
 dev_machine
