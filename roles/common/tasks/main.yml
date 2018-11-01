@@ -1,11 +1,22 @@
 ---
 # file: /roles/common/tasks/main.yml
 
-- name: 'Update apt cache'
+- name: 'update apt cache'
   apt:
     update_cache: yes
 
-- name: 'Install git'
+- name: 'install git'
   apt:
     name: 'git'
     state: 'present'
+
+- name: 'install fail2ban'
+  apt:
+    name: 'fail2ban'
+    state: 'present'
+
+- name: 'copy fail2ban config'
+  copy:
+    src: '../files/jail.local'
+    dest: '/etc/fail2ban/jail.local'
+  notify: 'restart fail2ban'
