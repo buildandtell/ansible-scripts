@@ -1,16 +1,3 @@
-ruby_version: 2.5.1
-rbenv_version: v1.1.1
-ruby_build_version: v20180424
-os_family: "{{ ansible_os_family|lower }}"
-mastodon_user: "mastodon"
-mastodon_home: "/home/{{ mastodon_user }}"
-mastodon_db_user: "{{ mastodon_user }}"
-mastodon_path: "live"
-mastodon_db: "{{ mastodon_user }}_development"
-mastodon_db_port: 5432
-disable_hsts: "false"
-disable_letsencrypt: "false"
-
 ubuntu_codename: "bionic"
 mastodon_db_login_unix_socket: '/var/run/postgresql'
 
@@ -50,6 +37,13 @@ packages:
   - package: "yarn"
   - package: "zlib1g-dev"
 
+postgres:
+  packages:
+    - package: "libpq-dev"
+    - package: "postgresql"
+    - package: "postgresql-contrib"
+    - package: "python-psycopg2"
+    - package: "sudo"
 
 redis:
   packages:

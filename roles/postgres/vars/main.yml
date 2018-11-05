@@ -1,0 +1,7 @@
+postgres:
+  packages:
+    - package: "libpq-dev"
+    - package: "postgresql"
+    - package: "postgresql-contrib"
+    - package: "python-psycopg2"
+    - package: "sudo"
