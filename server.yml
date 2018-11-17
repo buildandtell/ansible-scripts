@@ -1,15 +1,15 @@
 ---
 - name: Install buildandtell server for website, wiki, mastodon, forum and more
   hosts: '{{ env }}'
-  remote_user: ubuntu
+  remote_user: 'ubuntu'
   #gather_facts: no
   become: yes
   roles:
     #- { role: 'common' }
     #- { role: 'postgres' }
-    - { role: 'php' }
-    #- { role: 'geerlingguy.php' }
-      #- { role: 'redis' }
+    #- { role: 'php' }
+    #- { role: 'redis' }
+    - { role: 'ruby' , become_user: 'ubuntu' }
       #- { role: 'sslsetup' }
       #- { role: 'php' }
       #- { role: 'ruby' }

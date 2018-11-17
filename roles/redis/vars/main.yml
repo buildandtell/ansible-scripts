@@ -1,0 +1,4 @@
+redis:
+  packages:
+    - package: "redis-server"
+    - package: "redis-tools"
