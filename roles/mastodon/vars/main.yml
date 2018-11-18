@@ -1,4 +1,6 @@
-ruby_build_version: v20180424
+ruby_build_version: v20181106
+ruby_version: 2.5.3
+rbenv_version: v1.1.1
 os_family: "{{ ansible_os_family|lower }}"
 mastodon_user: "mastodon"
 mastodon_home: "/home/{{ mastodon_user }}"
@@ -23,6 +25,7 @@ packages:
   - package: "g++"
   - package: "gcc"
   - package: "git"
+  - package: "git-core"
   - package: "imagemagick"
   - package: "libffi-dev"
   - package: "libgdbm-dev"
@@ -47,3 +50,5 @@ packages:
   - package: "unattended-upgrades"
   - package: "yarn"
   - package: "zlib1g-dev"
+  - package: "libreadline6-dev"
+  - package: "libjemalloc-dev"

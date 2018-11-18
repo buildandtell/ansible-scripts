@@ -2,7 +2,7 @@
 
 - name: Copy nginx config
   template: 
-    src: ../files/nginx/mastodon.conf.j2
+    src: mastodon.conf.j2
     dest: /etc/nginx/sites-available/mastodon.conf
   when:
     - mastodon_host is defined
@@ -17,5 +17,3 @@
 
 - name: Reload nginx
   command: "systemctl reload nginx"
-  tags:
-    - systemd

@@ -1,0 +1,23 @@
+---
+- name: Install prerequisites
+  hosts: 'mastodon_servers'
+  remote_user: 'ubuntu'
+  gather_facts: false
+  become: yes
+  tasks:
+    - name: Install Python 2.x
+      raw: which python || sudo apt-get update && sudo apt-get install -qq -y python-simplejson
+      register: python_check
+      changed_when: python_check.stdout is not search('/usr/bin/python')
+
+- name: Install buildandtell server for website, wiki, mastodon, forum and more
+  hosts: 'mastodon_servers'
+  remote_user: 'ubuntu'
+  become: yes
+  roles:
+    - { role: 'common' }
+    - { role: 'swapfile', swapfile_size: 2GB, swapfile_file: /swapfile, tags: [swapfile] }
+    - { role: 'postgres' }
+    - { role: 'redis' }
+    - { role: 'mastodon', tags: ['mastodon'] }
+    #- { role: 'node_exporter', tags: ['mastodon'] }

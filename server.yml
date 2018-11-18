@@ -1,15 +1,26 @@
 ---
-- name: Install buildandtell server for website, wiki, mastodon, forum and more
-  hosts: '{{ env }}'
+- name: Install prerequisites
+  hosts: 'main server'
   remote_user: 'ubuntu'
-  #gather_facts: no
+  gather_facts: false
+  become: yes
+  tasks:
+    - name: Install Python 2.x
+      raw: which python || sudo apt-get update && sudo apt-get install -qq -y python-simplejson
+      register: python_check
+      changed_when: python_check.stdout is not search('/usr/bin/python')
+
+- name: Install buildandtell server for website, wiki, forum and more
+  hosts: 'main server'
+  remote_user: 'ubuntu'
   become: yes
   roles:
-    #- { role: 'common' }
+    - { role: 'common' }
     #- { role: 'postgres' }
-    #- { role: 'php' }
     #- { role: 'redis' }
-    - { role: 'ruby' , become_user: 'ubuntu' }
+    - { role: 'swapfile', swapfile_size: 1GB, swapfile_file: /swapfile, tags: [swapfile] }
+    #- { role: 'php' }
+    #- { role: 'ruby' , become_user: 'ubuntu' }
       #- { role: 'sslsetup' }
       #- { role: 'php' }
       #- { role: 'ruby' }

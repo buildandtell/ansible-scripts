@@ -7,4 +7,9 @@ custom_wiki.yml should take variables from commandline
 
 ansible-playbook server.yml -e env=development
 
-settig u ntp and swapfile
+- settig u ntp 
+- mastodon will be one server
+- discourse and
+
+## Notes
+- add a desable PasswordAuthentication to the commons role

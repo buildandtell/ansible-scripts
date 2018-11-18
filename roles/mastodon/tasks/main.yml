@@ -2,29 +2,30 @@
 - include: repositories.yml
   when: os_family == "debian"
 
-- include: packages.yml
+- include: database.yml
   become: true
+  become_user: postgres
+
+- include: packages.yml
 
 - include: ufw.yml
-  become: true
   tags:
     - firewall
 
 - include: user.yml
-  become: true
 
 - include: ruby.yml
-  become: true
   become_user: mastodon
+  tags:
+    - ruby
 
 - include: mastodon.yml
-  become: true
   become_user: mastodon
 
-- include: letsencrypt.yml
-  become: true
-  tags:
-    - letsencrypt 
+#- include: letsencrypt.yml
+#  tags:
+#    - letsencrypt 
 
 - include: nginx.yml
-  become: true
+  tags:
+    - nginx

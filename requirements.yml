@@ -1,0 +1,3 @@
+- name: swapfile
+  src: oefenweb.swapfile
+  version: v2.0.6

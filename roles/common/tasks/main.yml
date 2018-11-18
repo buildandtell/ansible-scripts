@@ -3,7 +3,9 @@
 
 - name: 'update apt cache'
   apt:
+    upgrade: yes
     update_cache: yes
+    cache_valid_time: 86400
 
 - name: 'install git'
   apt:
@@ -17,6 +19,19 @@
 
 - name: 'copy fail2ban config'
   copy:
-    src: '../files/jail.local'
+    src: 'jail.local'
     dest: '/etc/fail2ban/jail.local'
   notify: 'restart fail2ban'
+
+#- name: 'install iptables'
+#  apt:
+#    name: 'iptables-persistent'
+#    state: 'present'
+#
+#- name: 'copy iptables config'
+#  copy:
+#    src: 'rules.v4'
+#    dest: '/etc/iptables/rules.v4'
+#
+#- name: 'manually load iptables config'
+#  shell: 'iptables-restore < /etc/iptables/rules.v4'

@@ -9,3 +9,4 @@
     install_recommends: no
   become: yes
   with_items: "{{ postgres.packages }}"
+
