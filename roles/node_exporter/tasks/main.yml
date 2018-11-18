@@ -1,0 +1,40 @@
+---
+- name: 'Get node_exporter v0.16'
+  get_url:
+    url: 'https://github.com/prometheus/node_exporter/releases/download/v0.16.0/node_exporter-0.16.0.linux-amd64.tar.gz'
+    dest: '/tmp/node_exporter.tar.gz'
+    checksum: 'e92a601a5ef4f77cce967266b488a978711dabc527a720bea26505cba426c029'
+    register: 'node_exporter_downloaded'
+
+- name: 'Extract node_exporter'
+  unarchive:
+    src: '/tmp/node_exporter.tar.gz'
+    dest: '/tmp/node_exporter'
+
+- name: 'Change owership of node_exporter to node_exporter user'
+  file:
+    path: /work
+    owner: node_exporter
+    group: node_exporter
+  
+#
+#- name: 'Copy node_exporter binary to /usr/local/bin'
+#  # TODO
+#
+#- name: 'Add the systemd service file'
+#  # TODO, should i use another service manager?
+#
+#- name: 'Start and enable the service'
+#  # TODO
+#
+#- name: 'Add firewall rule so that port 9100 is only accessible by the prometheus server'
+#  # TODO
+
+# suppose installation is done
+
+- name: 'Add it to service discovery'
+  import_role:
+    name: service_discovery
+  vars:
+    targets: '["gitlab2d.fsf.org"]'
+    labels: '{"job":"node","category":"basic"}'
