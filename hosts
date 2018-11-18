@@ -3,4 +3,4 @@ dev_machine ansible_host=13.59.81.148
 [mastodon_servers]
 dev_machine
 
-[production]
+[main_servers]
