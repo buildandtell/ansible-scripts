@@ -11,12 +11,16 @@ A set of playbooks to deploy the following services:
 - Custom Wikis (DokuWiki) `[main_servers]`
 - Monitoring services `[main_servers]`
 
-
 We plan to run our services free of charge,
 With AWS Free tire, we can run one `t2.micro` EC2 instance`(30GB SSD+1GB Memory)` for one year.
 Because the 1GB memory is not enough to run all of our services we need to run **two** servers
 and we switch to a new AWS Free tire plan every 6th month. With these playbooks and backup scripts
 that should not be much of a hassle.
+
+### Roles installation
+```
+$ ansible-playbook install -r requirements.yml
+```
 
 ### Playbook usage
 Three primary playbooks:
