@@ -30,9 +30,8 @@ Three primary playbooks:
 
 **Examples:**
 ```
-$ ansible-playbook mastodon.yml --extra-vars="mastodon_db_password=your-password mastodon_host=buildandtell.xyz"
+$ ansible-playbook mastodon.yml
 ```
-- you can probably skip the --extra-vars after the first part
 - in mastodon, add the .env.production file as a file in ansible and run the compile rake command from ansible
 - also add the letsencrypt process in it so that there's 0 manual work
 - also add proper notify handlers
@@ -43,12 +42,17 @@ As we do not have infrastructure for a dedicated backup server, I wrote a few
 scripts to rsync databases and media files. It sets up cron service in your local machine
 that does daily backups.
 
+> **Note:** You will want to make sure that Mastodon is not running during the backup/restore process. if still running and the database might have changes which haven’t been written to disk yet. Therefore we quickly stop the container.
+
+https://wiki.postgresql.org/wiki/Automated_Backup_on_Linux
+
 On any supported machine, run the scripts individually and it will start backing up automatically.
 
 ### Items to backup
 - Mastodon
-    - database
-    - uploaded files
+    - PostgreSQL database
+    - User generated content (images, avatars, headers)
+    - Mastodon application secrets ( one time )
 - Discourse 
 - DokuWiki 
 
