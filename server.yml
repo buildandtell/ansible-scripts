@@ -10,16 +10,16 @@
       register: python_check
       changed_when: python_check.stdout is not search('/usr/bin/python')
 
-- name: Install buildandtell server for website, wiki, forum and more
+- name: Install buildandtell server for website, wiki, forum, monitoring server and more
   hosts: 'main server'
   remote_user: 'ubuntu'
   become: yes
   roles:
     - { role: 'common' }
-    #- { role: 'postgres' }
-    #- { role: 'redis' }
+    - { role: 'postgres' }
     - { role: 'swapfile', swapfile_size: 1GB, swapfile_file: /swapfile, tags: [swapfile] }
-    #- { role: 'php' }
+    - { role: 'ntp' }
+    - { role: 'php' }
     #- { role: 'ruby' , become_user: 'ubuntu' }
       #- { role: 'sslsetup' }
       #- { role: 'php' }
