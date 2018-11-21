@@ -84,14 +84,3 @@
     state: started
   become_user: root
 
-#- name: Restart mastodon-web
-#  command: systemctl restart mastodon-web.service
-#  when: production_config.stat.exists
-#
-#- name: Restart mastodon-streaming
-#  command: systemctl restart mastodon-streaming.service
-#  when: production_config.stat.exists
-#
-#- name: Restart mastodon-sidekiq
-#  command: systemctl restart mastodon-sidekiq.service
-#  when: production_config.stat.exists

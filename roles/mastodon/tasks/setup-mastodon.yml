@@ -1,0 +1,40 @@
+---
+- stat: path={{ mastodon_home }}/{{ mastodon_path }}/.env.production
+  register: production_config
+
+- block:
+    - name: 'copy .env.production'
+      template:
+        src: '.env.production.j2'
+        dest: '{{ mastodon_home }}/{{ mastodon_path }}/.env.production'
+      when: not production_config.stat.exists
+
+    - name: 'database setup'
+      shell: "RAILS_ENV=production SAFETY_ASSURED=1 ~/.rbenv/shims/bundle exec rails db:setup"
+      args:
+        chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
+      when: not production_config.stat.exists
+
+    - name: 'precompile assets'
+      shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rails assets:precompile"
+      args:
+        chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
+      when: not production_config.stat.exists
+
+    - name: Restart mastodon-web
+      service:
+        name: mastodon-web.service
+        state: started
+    
+    - name: Restart mastodon-streaming
+      service:
+        name: mastodon-streaming.service
+        state: started
+    
+    - name: Restart mastodon-sidekiq
+      service:
+        name: mastodon-sidekiq.service
+        state: started
+
+  when: 
+    - config_install

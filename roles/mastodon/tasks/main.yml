@@ -2,9 +2,9 @@
 - include: repositories.yml
   when: os_family == "debian"
 
-#- include: database.yml
-#  become: true
-#  become_user: postgres
+- include: database.yml
+  become: true
+  become_user: postgres
 
 - include: packages.yml
 
@@ -14,10 +14,14 @@
     name: ruby
   become_user: mastodon
 
-
 - include: mastodon.yml
   become_user: mastodon
 
 - include: nginx.yml
 
 - include: letsencrypt.yml
+
+- include: setup-mastodon.yml
+  become_user: mastodon
+  tags:
+    - setup mastodon

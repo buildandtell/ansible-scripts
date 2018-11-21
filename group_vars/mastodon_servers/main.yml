@@ -1,3 +1,9 @@
 ---
-mastodon_db_password: '{{ vault_mastodon_db_password }}'
-mastodon_host: social.buildandtell.xyz
+mastodon_db_pass: '{{ vault_mastodon_db_pass }}'
+mastodon_host: 'social.buildandtell.xyz'
+mastodon_secret_key_base: '{{ vault_mastodon_secret_key_base }}'
+mastodon_otp_secret: '{{ vault_mastodon_otp_secret }}'
+mastodon_vapid_private_key: '{{ vault_mastodon_vapid_private_key }}'
+mastodon_vapid_public_key: '{{ vault_mastodon_vapid_public_key }}'
+mastodon_smtp_key: '{{ vault_mastodon_smtp_key }}'
+config_install: true

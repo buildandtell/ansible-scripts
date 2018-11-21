@@ -32,10 +32,12 @@ Three primary playbooks:
 ```
 $ ansible-playbook mastodon.yml
 ```
-- in mastodon, add the .env.production file as a file in ansible and run the compile rake command from ansible
-- also add the letsencrypt process in it so that there's 0 manual work
-- also add proper notify handlers
-- use treliss handler technique to get handlers from othr roles
+
+#### Useful rake tasks:
+```
+$ RAILS_ENV=production bundle exec rails mastodon:make_admin USERNAME=alice
+```
+
 
 ## Backup
 As we do not have infrastructure for a dedicated backup server, I wrote a few
