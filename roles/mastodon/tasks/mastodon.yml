@@ -20,21 +20,21 @@
   args:
     chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
 
-- name: Install systemd sidekiq Service Files
+- name: Copy systemd mastodon-sidekiq
   template:
     src: mastodon-sidekiq.service.j2
     dest: /etc/systemd/system/mastodon-sidekiq.service
   become: true
   become_user: root
 
-- name: Install systemd web Service Files
+- name: Copy systemd mastodon-web.service 
   template:
     src: mastodon-web.service.j2
     dest: /etc/systemd/system/mastodon-web.service
   become: true
   become_user: root
 
-- name: Install systemd streaming Service Files
+- name: Copy systemd mastodon-streaming.service
   template:
     src: mastodon-streaming.service.j2
     dest: /etc/systemd/system/mastodon-streaming.service
@@ -64,34 +64,34 @@
   when: production_config.stat.exists
 
 - name: Enable mastodon-web
-  command: systemctl enable mastodon-web.service
-  become: true
+  service:
+    name: mastodon-web.service
+    enabled: yes
+    state: started
   become_user: root
 
 - name: Enable mastodon-streaming
-  command: systemctl enable mastodon-streaming.service
-  become: true
+  service:
+    name: mastodon-streaming.service
+    enabled: yes
+    state: started
   become_user: root
 
 - name: Enable mastodon-sidekiq
-  command: systemctl enable mastodon-sidekiq.service
-  become: true
+  service:
+    name: mastodon-sidekiq.service
+    enabled: yes
+    state: started
   become_user: root
 
-- name: Restart mastodon-web
-  command: systemctl restart mastodon-web.service
-  when: production_config.stat.exists
-  become: true
-  become_user: root
-
-- name: Restart mastodon-streaming
-  command: systemctl restart mastodon-streaming.service
-  when: production_config.stat.exists
-  become: true
-  become_user: root
-
-- name: Restart mastodon-sidekiq
-  command: systemctl restart mastodon-sidekiq.service
-  when: production_config.stat.exists
-  become: true
-  become_user: root
+#- name: Restart mastodon-web
+#  command: systemctl restart mastodon-web.service
+#  when: production_config.stat.exists
+#
+#- name: Restart mastodon-streaming
+#  command: systemctl restart mastodon-streaming.service
+#  when: production_config.stat.exists
+#
+#- name: Restart mastodon-sidekiq
+#  command: systemctl restart mastodon-sidekiq.service
+#  when: production_config.stat.exists

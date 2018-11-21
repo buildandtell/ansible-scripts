@@ -52,3 +52,4 @@ packages:
   - package: "zlib1g-dev"
   - package: "libreadline6-dev"
   - package: "libjemalloc-dev"
+  - package: "certbot"

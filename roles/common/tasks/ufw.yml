@@ -24,3 +24,9 @@
     port: 443
     rule: allow
 
+- name: Allow node_exporter enpoint access to Prometheus server
+  ufw: 
+    proto: any
+    port: 9100
+    from_ip: '{{ prometheus_server_ip }}'
+    rule: allow

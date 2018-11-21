@@ -2,30 +2,31 @@
 - stat: path=/etc/letsencrypt/live/{{ mastodon_host }}/fullchain.pem
   register: letsencrypt_cert
 
-- name: Copy letsencrypt nginx config
-  template: 
-    src: ../files/nginx/letsencrypt.conf.j2
-    dest: /etc/nginx/sites-available/mastodon.conf
+- name: Install letsencrypt cert
+  command: "certbot certonly --webroot -d {{ mastodon_host }} -w {{ mastodon_home }}/{{ mastodon_path }}/public/ --email contact@buildandtell.xyz --non-interactive --agree-tos"
   when: not letsencrypt_cert.stat.exists
-  
-- name: Symlink enabled site
+  become_user: root
+  notify: reload nginx
+
+- name: remove symlink to acme.conf
+  file:
+    path: "/etc/nginx/sites-enabled/acme.conf"
+    state: absent
+
+- name: symlink to mastodon.conf
   file:
     src: "/etc/nginx/sites-available/mastodon.conf"
     dest: "/etc/nginx/sites-enabled/mastodon.conf"
     state: link
-  when: not letsencrypt_cert.stat.exists
+  when:
+    - mastodon_host is defined
+  notify: reload nginx
 
-- name: Reload nginx
-  command: "systemctl reload nginx"
-
-- name: Install letsencrypt cert
-  command: letsencrypt certonly -n --webroot -d {{ mastodon_host }} -w {{ mastodon_home }}/{{ mastodon_path }}/public/ --email "webmaster@{{ mastodon_host }}" && systemctl reload nginx
-  when: not letsencrypt_cert.stat.exists
-
-- name: Letsencrypt Job
+- name: Set letsencrypt cronjob
   cron:
     name: "letsencrypt renew"
     minute: "15"
     hour: "0"
-    job: "letsencrypt renew && service nginx reload"
+    job: "certbot renew"
+  notify: reload nginx
 

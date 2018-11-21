@@ -10,14 +10,17 @@
       register: python_check
       changed_when: python_check.stdout is not search('/usr/bin/python')
 
-- name: Install buildandtell server for website, wiki, mastodon, forum and more
+- name: Install buildandtell mastodon server
   hosts: 'mastodon_servers'
   remote_user: 'ubuntu'
   become: yes
+  vars:
+    - playbook_name: mastodon
   roles:
     - { role: 'common' }
     - { role: 'swapfile', swapfile_size: 2GB, swapfile_file: /swapfile, tags: [swapfile] }
     - { role: 'postgres' }
     - { role: 'redis' }
+    - { role: 'nginx' }
     - { role: 'mastodon', tags: ['mastodon'] }
     #- { role: 'node_exporter', tags: ['mastodon'] }
