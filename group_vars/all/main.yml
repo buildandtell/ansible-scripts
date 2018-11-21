@@ -1,2 +1,4 @@
 ---
 prometheus_server_ip: '192.168.1.1'
+ntp_timezone: Asia/Calcutta
+ntp_manage_config: true

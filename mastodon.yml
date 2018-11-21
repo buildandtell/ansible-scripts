@@ -19,6 +19,7 @@
   roles:
     - { role: 'common' }
     - { role: 'swapfile', swapfile_size: 2GB, swapfile_file: /swapfile, tags: [swapfile] }
+    - { role: 'ntp', tags: [ntp] }
     - { role: 'postgres' }
     - { role: 'redis' }
     - { role: 'nginx' }
