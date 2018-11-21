@@ -1,6 +1,8 @@
-dev_machine ansible_host=13.59.81.148
+mastodon_machine_1 ansible_host=13.59.81.148
+main_machine_1 ansible_host=18.218.213.146
 
 [mastodon_servers]
-dev_machine
+mastodon_machine_1
 
 [main_servers]
+main_machine_1
