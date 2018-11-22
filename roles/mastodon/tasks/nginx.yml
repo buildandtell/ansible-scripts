@@ -1,29 +1,20 @@
 ---
-
-- name: Copy nginx config
+- name: copy nginx config
   template: 
     src: mastodon.conf.j2
     dest: /etc/nginx/sites-available/mastodon.conf
   when:
     - mastodon_host is defined
-  
-- name: Copy acme config
-  template: 
-    src: acme.conf.j2
-    dest: /etc/nginx/sites-available/acme.conf
 
-- name: symlink acme.conf
+- name: symlink to mastodon.conf
   file:
-    src: "/etc/nginx/sites-available/acme.conf"
-    dest: "/etc/nginx/sites-enabled/acme.conf"
+    src: "/etc/nginx/sites-available/mastodon.conf"
+    dest: "/etc/nginx/sites-enabled/mastodon.conf"
     state: link
-
-- name: restart nginx
-  service:
-    name: nginx
-    state: reloaded
-
-- name: Create log directory
+  when:
+    - mastodon_host is defined
+  
+- name: create log directory
   file:
     path: "{{ mastodon_home }}/logs"
     state: directory
@@ -32,12 +23,13 @@
     mode: 0700
   become_user: root
 
-- name: Create access log file
+- name: create access log file
   file:
     path: "{{ mastodon_home }}/logs/access.log"
     state: touch
 
-- name: Create error log file
+- name: create error log file
   file:
     path: "{{ mastodon_home }}/logs/access.log"
     state: touch
+  notify: reload nginx

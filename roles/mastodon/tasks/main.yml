@@ -19,8 +19,6 @@
 
 - include: nginx.yml
 
-- include: letsencrypt.yml
-
 - include: setup-mastodon.yml
   become_user: mastodon
   tags:

@@ -23,5 +23,6 @@
     - { role: 'postgres' }
     - { role: 'redis' }
     - { role: 'nginx' }
+    - { role: 'certbot', domains: ['social.buildandtell.xyz'] }
     - { role: 'mastodon', tags: ['mastodon'] }
     #- { role: 'node_exporter', tags: ['mastodon'] }
