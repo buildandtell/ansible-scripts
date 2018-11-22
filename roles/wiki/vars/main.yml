@@ -1,0 +1,10 @@
+---
+dokuwiki_source: https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz
+dokuwiki_install: true
+
+dokuwiki_base: /srv/www/dokuwiki
+
+dokuwiki_group: www-data
+dokuwiki_user: dokuwiki
+
+nginx_server_name: wiki.buildandtell.xyz

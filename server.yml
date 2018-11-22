@@ -19,11 +19,12 @@
   roles:
     - { role: 'common' }
     - { role: 'postgres' }
-    - { role: 'swapfile', swapfile_size: 1GB, swapfile_file: /swapfile, tags: [swapfile] }
+    - { role: 'swapfile', swapfile_size: 2GB, swapfile_file: /swapfile, tags: [swapfile] }
     - { role: 'ntp' }
     - { role: 'php' }
     - { role: 'nginx', tags: [nginx]}
-    - { role: 'wiki' }
+    - { role: 'certbot', tags: [certbot], domains: ['buildandtell.xyz','*.buildandtell.xyz']}
+    #- { role: 'wiki' }
     #- { role: 'ruby' , become_user: 'ubuntu' }
       #- { role: 'ruby' }
       #- { role: 'website' }

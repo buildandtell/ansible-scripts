@@ -2,3 +2,5 @@
 prometheus_server_ip: '192.168.1.1'
 ntp_timezone: Asia/Calcutta
 ntp_manage_config: true
+cloudflare_email: '{{ vault_cloudflare_email }}'
+cloudflare_apikey: '{{ vault_cloudflare_apikey }}'

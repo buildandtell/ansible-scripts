@@ -1,0 +1,11 @@
+certbot certonly
+--dns-cloudflare
+--dns-cloudflare-credentials /etc/nginx/cloudflare.ini
+--server https://acme-v02.api.letsencrypt.org/directory
+--keep-until-expiring
+--agree-tos
+--email {{ cloudflare_email }}
+--preferred-challenges dns-01
+{% for d in domains -%}
+ -d "{{ d }}"
+{% endfor -%}

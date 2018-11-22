@@ -1,0 +1,24 @@
+---
+
+- name: Install certbot and friends
+  apt:
+    name: "{{ item.package }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items:
+    - package: certbot
+    - package: python3-certbot-dns-cloudflare
+
+- name: Copy cloudflare credentials
+  template:
+    src: cloudflare.ini.j2
+    dest: /etc/nginx/cloudflare.ini
+    owner: root
+    group: root
+    mode: 0600
+  become: yes
+
+- name: Install the certificate
+  command: "{{ lookup('template', 'certbot_command.j2') }}"
+  become: yes

@@ -1,0 +1,26 @@
+---
+- name: Make sure dokuwiki base directory exists
+  file:
+    path: "{{ dokuwiki_base }}"
+    state: directory
+  become: yes
+
+- name: Download and extract dokuwiki
+  unarchive:
+    src: "{{ dokuwiki_source }}"
+    dest: "{{ dokuwiki_base }}"
+    remote_src: true
+    extra_opts: ["--strip-components=1"]
+    group: "{{ dokuwiki_group }}"
+    owner: "{{ dokuwiki_user }}"
+    mode: u=rwX,g=rwX,o=rX
+# args:
+#   creates: "{{ dokuwiki_base }}/index.php"
+
+- name: Install nginx configuration file
+  template:
+    src: templates/nginx.j2
+    dest: /etc/nginx/sites-available/docku.conf
+    owner: root
+    group: root
+  notify: restart nginx
