@@ -1,0 +1,12 @@
+<?php
+
+// enable farm
+if(!defined('DOKU_FARMDIR')) define('DOKU_FARMDIR', '{{ dokuwiki_farm }}');
+include(fullpath(dirname(__FILE__)).'/farm.php');
+
+// set defaults and restrictions
+$config_cascade['main']['default'][] = DOKU_INC.'conf/local.php';
+$config_cascade['main']['protected'][] = DOKU_INC.'conf/local.protected.php';
+
+// disable farmer
+if (DOKU_FARM == false) { nice_die('Access to the farmer denied'); }

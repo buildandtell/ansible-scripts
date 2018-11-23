@@ -1,0 +1,48 @@
+---
+- name: create web base {{ dokuwiki_base }}
+  file:
+    path: "{{ dokuwiki_base }}"
+    state: directory
+  become: yes
+
+- name: download and extract dokuwiki
+  unarchive:
+    src: "{{ dokuwiki_source }}"
+    dest: "{{ dokuwiki_base }}"
+    remote_src: true
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    extra_opts: ["--strip-components=1"]
+
+- name: copy configuration files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    group: "{{ web_group }}"
+    owner: "{{ web_user }}"
+    mode: 0644
+  become: yes
+  with_items:
+     - { src: local.php.j2, dest: "{{ dokuwiki_base }}/conf/local.php" }
+     - { src: local.protected.php.j2, dest: "{{ dokuwiki_base }}/conf/local.protected.php" }
+     - { src: plugins.local.php.j2, dest: "{{ dokuwiki_base }}/conf/plugins.local.php" }
+     - { src: preload.php.j2, dest: "{{ dokuwiki_base }}/inc/preload.php" }
+
+# - add the required plugins, put some default configurations
+
+#- name: Install nginx configuration file
+#  template:
+#    src: templates/nginx.j2
+#    dest: /etc/nginx/sites-available/docku.conf
+#    owner: root
+#    group: root
+#  notify: restart nginx
+
+#- name: create dokuwiki farm {{ dokuwiki_farm }}
+#  file:
+#    path: "{{ dokuwiki_farm }}"
+#    state: directory
+#    owner: "{{ web_user }}"
+#    group: "{{ web_group }}"
+#  become: yes
+

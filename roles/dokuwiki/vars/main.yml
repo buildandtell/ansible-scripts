@@ -1,0 +1,8 @@
+---
+dokuwiki_source: https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz
+dokuwiki_base: /srv/www/dokuwiki
+dokuwiki_farm: /srv/www/farm
+web_user: www-data
+web_group: www-data
+plugins:
+  - https://github.com/splitbrain/dokuwiki-plugin-smtp/zipball/master

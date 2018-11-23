@@ -24,7 +24,8 @@
     - { role: 'php' }
     - { role: 'nginx', tags: [nginx]}
     - { role: 'certbot', tags: [certbot], domains: ['buildandtell.xyz','*.buildandtell.xyz']}
-    #- { role: 'wiki' }
+    - { role: 'dokuwiki', tags: [dokuwiki] }
+    #- { role: 'wikianimal', domain: 'wiki.buildandtell.xyz' }
     #- { role: 'ruby' , become_user: 'ubuntu' }
       #- { role: 'ruby' }
       #- { role: 'website' }
