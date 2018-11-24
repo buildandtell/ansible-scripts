@@ -1,0 +1,39 @@
+---
+
+- name: create homepage directory
+  file:
+    path: "{{ homepage_base }}"
+    state: directory
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+
+- name: clone homepage repository from github
+  git:
+    repo: 'https://github.com/buildandtell/homepage.git'
+    dest: "{{ homepage_base }}"
+    update: yes
+
+- name: add the nginx config
+  template:
+    src: homepage.conf.j2
+    dest: /etc/nginx/sites-available/homepage.conf
+
+- name: add the symlink
+  file:
+    src: /etc/nginx/sites-available/homepage.conf
+    dest: /etc/nginx/sites-enabled/homepage.conf
+    state: link
+
+- name: create log directory
+  file:
+    path: "/var/log/{{ main_host }}/"
+    state: directory
+  become_user: root
+
+- name: create log files
+  file:
+    path: "/var/log/{{ main_host }}/{{item.filename }}"
+    state: touch
+  with_items:
+    - { filename: access.log }
+    - { filename: error.log }

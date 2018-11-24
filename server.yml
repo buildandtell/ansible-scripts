@@ -17,15 +17,16 @@
   vars:
     - playbook_name: 'server'
   roles:
-    - { role: 'common' }
-    - { role: 'postgres' }
-    - { role: 'swapfile', swapfile_size: 2GB, swapfile_file: /swapfile, tags: [swapfile] }
-    - { role: 'ntp' }
-    - { role: 'php' }
-    - { role: 'nginx', tags: [nginx]}
-    - { role: 'certbot', tags: [certbot], domains: ['buildandtell.xyz','*.buildandtell.xyz']}
+    #- { role: 'common' }
+    #- { role: 'postgres' }
+    #- { role: 'swapfile', swapfile_size: 2GB, swapfile_file: /swapfile, tags: [swapfile] }
+    #- { role: 'ntp' }
+    #- { role: 'php' }
+    #- { role: 'nginx', tags: [nginx]}
+    #- { role: 'certbot', tags: [certbot], domains: ['buildandtell.xyz','*.buildandtell.xyz']}
     - { role: 'dokuwiki', tags: [dokuwiki] }
     - { role: 'wikianimal', domain: 'wiki.buildandtell.xyz', tags: [wikianimal] }
+    - { role: 'homepage' }
     #- { role: 'ruby' , become_user: 'ubuntu' }
       #- { role: 'ruby' }
       #- { role: 'website' }

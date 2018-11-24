@@ -55,13 +55,13 @@
 
 - name: create log directory
   file:
-    path: "{{ dokuwiki_base }}/logs"
+    path: "/var/log/{{ nginx_servername }}"
     state: directory
   become_user: root
 
 - name: create log files
   file:
-    path: "{{ dokuwiki_base }}/logs/{{ item.filename }}"
+    path: "/var/log/{{ nginx_servername }}/{{ item.filename }}"
     state: touch
   with_items:
     - { filename: access.log }
@@ -71,5 +71,9 @@
   template:
     src: templates/doku.conf.j2
     dest: /etc/nginx/sites-available/doku.conf
-    owner: root
-    group: root
+
+- name: add the symlink
+  file:
+    src: /etc/nginx/sites-available/doku.conf
+    dest: /etc/nginx/sites-enabled/doku.conf
+    state: link

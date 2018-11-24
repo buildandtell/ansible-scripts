@@ -1,0 +1,5 @@
+---
+nginx_servername: buildandtell.xyz
+homepage_base: /srv/www/homepage
+web_user: www-data
+web_group: www-data
