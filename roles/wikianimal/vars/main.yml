@@ -1,0 +1,6 @@
+---
+dokuwiki_base: /srv/www/dokuwiki
+dokuwiki_farm: /srv/www/farm
+web_user: www-data
+web_group: www-data
+animal_source: https://www.dokuwiki.org/_media/dokuwiki_farm_animal.zip

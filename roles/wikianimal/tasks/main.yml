@@ -1,0 +1,25 @@
+---
+- name: install unzip (required)
+  apt:
+    name: unzip
+    state: present
+  become: yes
+
+- name: create dokuwiki farm {{ dokuwiki_farm }}
+  file:
+    path: "{{ dokuwiki_farm }}"
+    state: directory
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+  become: yes
+
+- name: copy animal into the farm 
+  unarchive:
+    src: "{{ animal_source }}"
+    dest: "{{ dokuwiki_farm }}"
+    remote_src: true
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+
+- name: rename _animal to domain name
+  command: mv {{ dokuwiki_farm }}/_animal {{ dokuwiki_farm }}/{{ domain }}

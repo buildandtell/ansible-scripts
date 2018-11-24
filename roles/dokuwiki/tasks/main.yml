@@ -23,12 +23,33 @@
     mode: 0644
   become: yes
   with_items:
-     - { src: local.php.j2, dest: "{{ dokuwiki_base }}/conf/local.php" }
-     - { src: local.protected.php.j2, dest: "{{ dokuwiki_base }}/conf/local.protected.php" }
-     - { src: plugins.local.php.j2, dest: "{{ dokuwiki_base }}/conf/plugins.local.php" }
-     - { src: preload.php.j2, dest: "{{ dokuwiki_base }}/inc/preload.php" }
+    - { src: local.php.j2, dest: "{{ dokuwiki_base }}/conf/local.php" }
+    - { src: local.protected.php.j2, dest: "{{ dokuwiki_base }}/conf/local.protected.php" }
+    - { src: plugins.local.php.j2, dest: "{{ dokuwiki_base }}/conf/plugins.local.php" }
+    - { src: preload.php.j2, dest: "{{ dokuwiki_base }}/inc/preload.php" }
 
-# - add the required plugins, put some default configurations
+- name: install few useful plugins
+  unarchive:
+    src: "{{ role_path }}/files/{{ item.name }}.tar"
+    dest: "{{ dokuwiki_base }}/lib/plugins"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+  with_items:
+    - { name: smtp }
+
+- name: remove few unwanted plugins
+  file:
+    path: "{{ dokuwiki_base }}/lib/plugins/{{ item.name }}"
+    state: absent
+  with_items:
+    - { name: authad }
+    - { name: authpdo }
+    - { name: authmysql }
+    - { name: authldap }
+    - { name: authpgsql }
+
+
+# - put some default configurations
 
 #- name: Install nginx configuration file
 #  template:
@@ -38,11 +59,4 @@
 #    group: root
 #  notify: restart nginx
 
-#- name: create dokuwiki farm {{ dokuwiki_farm }}
-#  file:
-#    path: "{{ dokuwiki_farm }}"
-#    state: directory
-#    owner: "{{ web_user }}"
-#    group: "{{ web_group }}"
-#  become: yes
 
