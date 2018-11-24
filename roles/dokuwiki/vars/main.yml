@@ -4,3 +4,4 @@ dokuwiki_base: /srv/www/dokuwiki
 dokuwiki_farm: /srv/www/farm
 web_user: www-data
 web_group: www-data
+nginx_servername: "*.buildandtell.xyz"

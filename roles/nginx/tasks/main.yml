@@ -30,6 +30,12 @@
     dest: "{{ nginx_path }}"
   notify: reload nginx
 
+- name: Copy drop config
+  template:
+    src: drop.conf.j2
+    dest: "{{ nginx_path }}/conf.d/drop.conf"
+  notify: reload nginx
+
 - name: Create nginx.conf
   template:
     src: "{{ nginx_conf }}"

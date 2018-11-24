@@ -48,15 +48,28 @@
     - { name: authldap }
     - { name: authpgsql }
 
+- name: remove install.php
+  file:
+    path: "{{ dokuwiki_base }}/install.php"
+    state: absent
 
-# - put some default configurations
+- name: create log directory
+  file:
+    path: "{{ dokuwiki_base }}/logs"
+    state: directory
+  become_user: root
 
-#- name: Install nginx configuration file
-#  template:
-#    src: templates/nginx.j2
-#    dest: /etc/nginx/sites-available/docku.conf
-#    owner: root
-#    group: root
-#  notify: restart nginx
+- name: create log files
+  file:
+    path: "{{ dokuwiki_base }}/logs/{{ item.filename }}"
+    state: touch
+  with_items:
+    - { filename: access.log }
+    - { filename: error.log }
 
-
+- name: copy nginx configuration file
+  template:
+    src: templates/doku.conf.j2
+    dest: /etc/nginx/sites-available/doku.conf
+    owner: root
+    group: root

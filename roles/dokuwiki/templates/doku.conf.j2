@@ -1,0 +1,80 @@
+# {{ ansible_managed }}
+
+server {
+  listen 80;
+  listen [::]:80;
+  server_name {{ nginx_servername }};
+  root {{ dokuwiki_base }};
+  location / { return 301 https://$host$request_uri; }
+}
+
+server {
+  listen 443 ssl http2;
+  listen [::]:443 ssl http2;
+  server_name {{ nginx_servername }};
+
+  {% block logs -%}
+  access_log {{ dokuwiki_base }}/logs/access.log main;
+  error_log {{ dokuwiki_base }}/logs/error.log;
+  {% endblock %}
+
+  root {{ dokuwiki_base }};
+  index doku.php;
+
+  {% block https -%}
+  include h5bp/directive-only/ssl.conf;
+  include h5bp/directive-only/ssl-stapling.conf;
+  ssl_dhparam /etc/nginx/ssl/dhparams.pem;
+  ssl_buffer_size 1400; # 1400 bytes to fit in one MTU
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; ";
+  ssl_certificate         /etc/letsencrypt/live/{{ main_host }}/fullchain.pem;
+  ssl_certificate_key     /etc/letsencrypt/live/{{ main_host }}/privkey.pem;
+  ssl_trusted_certificate /etc/letsencrypt/live/{{ main_host }}/chain.pem;
+  {% endblock -%}
+
+  include h5bp/directive-only/cache-file-descriptors.conf;                                                                                                                                     
+  include h5bp/directive-only/extra-security.conf;                                                                                                                                             
+  include h5bp/directive-only/x-ua-compatible.conf;                                                                                                                                            
+  include h5bp/location/protect-system-files.conf; 
+
+  sendfile             on;
+  client_max_body_size 4M;
+  client_body_buffer_size 128k;
+
+  gzip on;
+  gzip_disable "msie6";
+  gzip_vary on;
+  gzip_proxied any;
+  gzip_comp_level 6;
+  gzip_buffers 16 8k;
+  gzip_http_version 1.1;
+  gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+  include conf.d/drop.conf;
+
+  location ~ /(data/|conf/|bin/|inc/) { deny all; }
+  location ~ /\.ht { deny  all; }
+
+  location ~ ^/lib.*\.(js|css|gif|png|ico|jpg|jpeg)$ {
+      expires 365d;
+  }
+
+  location / { try_files $uri $uri/ @dokuwiki; }
+
+  location @dokuwiki {
+	  rewrite ^/_media/(.*) /lib/exe/fetch.php?media=$1 last;
+	  rewrite ^/_detail/(.*) /lib/exe/detail.php?media=$1 last;
+	  rewrite ^/_export/([^/]+)/(.*) /doku.php?do=export_$1&id=$2 last;
+	  rewrite ^/(.*) /doku.php?id=$1&$args last;
+  }
+
+  location ~ \.php$ {
+      try_files $uri $uri/ /doku.php;
+      include fastcgi_params;
+      fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+      fastcgi_param REDIRECT_STATUS 200;
+      fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+  }
+
+  error_page 500 501 502 503 504 /500.html;
+}

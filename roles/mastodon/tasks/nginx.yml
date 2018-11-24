@@ -23,13 +23,11 @@
     mode: 0700
   become_user: root
 
-- name: create access log file
+- name: create log files
   file:
-    path: "{{ mastodon_home }}/logs/access.log"
+    path: "{{ mastodon_home }}/logs/{{ item.filename }}"
     state: touch
-
-- name: create error log file
-  file:
-    path: "{{ mastodon_home }}/logs/access.log"
-    state: touch
+  with_items:
+    - { filename: access.log }
+    - { filename: error.log }
   notify: reload nginx
