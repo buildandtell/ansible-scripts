@@ -26,8 +26,8 @@
     - { role: 'nginx', tags: [nginx]}
     - { role: 'certbot', tags: [certbot], domains: ['buildandtell.xyz','*.buildandtell.xyz']}
     - { role: 'discourse' }
-    #- { role: 'php' }
-    #- { role: 'dokuwiki', tags: [dokuwiki] }
-    #- { role: 'wikianimal', domain: 'wiki.buildandtell.xyz', tags: [wikianimal] }
-    #- { role: 'homepage' }
+    - { role: 'php' }
+    - { role: 'dokuwiki', tags: [dokuwiki] }
+    - { role: 'wikianimal', domain: 'wiki.buildandtell.xyz', tags: [wikianimal] }
+    - { role: 'homepage' }
       #- { role: 'monitoring' }
