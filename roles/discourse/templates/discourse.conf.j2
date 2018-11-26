@@ -4,7 +4,6 @@ server {
   listen 80;
   listen [::]:80;
   server_name {{ nginx_servername }};
-  root {{ dokuwiki_base }};
   location / { return 301 https://$host$request_uri; }
 }
 
@@ -17,9 +16,6 @@ server {
   access_log /var/log/{{ nginx_servername }}/access.log main;
   error_log /var/log/{{ nginx_servername }}/error.log;
   {% endblock %}
-
-  root {{ dokuwiki_base }};
-  index doku.php;
 
   {% block https -%}
   include h5bp/directive-only/ssl.conf;
@@ -51,29 +47,15 @@ server {
   gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
 
   include conf.d/drop.conf;
+  http2_idle_timeout 5m;
 
-  location ~ /(data/|conf/|bin/|inc/) { deny all; }
-  location ~ /\.ht { deny  all; }
-
-  location ~ ^/lib.*\.(js|css|gif|png|ico|jpg|jpeg)$ {
-      expires 365d;
-  }
-
-  location / { try_files $uri $uri/ @dokuwiki; }
-
-  location @dokuwiki {
-	  rewrite ^/_media/(.*) /lib/exe/fetch.php?media=$1 last;
-	  rewrite ^/_detail/(.*) /lib/exe/detail.php?media=$1 last;
-	  rewrite ^/_export/([^/]+)/(.*) /doku.php?do=export_$1&id=$2 last;
-	  rewrite ^/(.*) /doku.php?id=$1&$args last;
-  }
-
-  location ~ \.php$ {
-      try_files $uri $uri/ /doku.php;
-      include fastcgi_params;
-      fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-      fastcgi_param REDIRECT_STATUS 200;
-      fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+  location / {
+      proxy_pass http://unix:{{ discourse_location }}/shared/standalone/nginx.http.sock:;
+      proxy_set_header Host $http_host;
+      proxy_http_version 1.1;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto https;
+      proxy_set_header X-Real-IP $remote_addr;
   }
 
   error_page 500 501 502 503 504 /500.html;

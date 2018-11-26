@@ -1,0 +1,68 @@
+---
+- name: ensure docker is running
+  service: 
+    name: docker
+    state: restarted
+
+- name: create {{ discourse_location }}
+  file:
+    path: '{{ discourse_location }}'
+    state: directory
+
+- name: clone latest discourse_docker repo
+  git:
+    repo: https://github.com/discourse/discourse_docker.git
+    dest: '{{ discourse_location }}'
+    update: no
+
+- name: check if {{ discourse_location }}/containers/app.yml exists
+  stat:
+    path: '{{ discourse_location }}/containers/app.yml'
+  register: appyml
+
+- name: copy discourse configuration app.yml
+  template:
+    src: app.yml.j2
+    dest: '{{ discourse_location }}/containers/app.yml'
+
+- name: copy discourse nginx configuration
+  template:
+    src: discourse.conf.j2
+    dest: /etc/nginx/sites-available/discourse.conf
+
+- name: add the symlink
+  file:
+    src: /etc/nginx/sites-available/discourse.conf
+    dest: /etc/nginx/sites-enabled/discourse.conf
+    state: link
+
+- name: create log directory
+  file:
+    path: "/var/log/{{ nginx_servername }}"
+    state: directory
+
+- name: create log files
+  file:
+    path: "/var/log/{{ nginx_servername }}/{{ item.filename }}"
+    state: touch
+  with_items:
+    - { filename: access.log }
+    - { filename: error.log }
+
+- name: bootstrap discourse
+  command: ./launcher bootstrap app
+  args:
+    chdir: "{{ discourse_location }}"
+  when: appyml.stat.exists == False
+  notify:
+    - start discourse
+    - reload nginx
+
+- name: rebuild discourse
+  command: ./launcher rebuild app
+  args:
+    chdir: "{{ discourse_location }}"
+  when: appyml.stat.exists == True
+  notify:
+    - start discourse
+    - reload nginx

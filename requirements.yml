@@ -4,4 +4,8 @@
 
 - name: ntp
   src: geerlingguy.ntp
-  version: 1.6.0
+  version: v1.6.0
+
+- name: docker
+  src: angstwad.docker_ubuntu
+  version: v3.7.0

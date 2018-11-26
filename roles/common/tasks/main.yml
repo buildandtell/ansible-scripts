@@ -7,10 +7,19 @@
     update_cache: yes
     cache_valid_time: 86400
 
-- name: 'install git'
+- name: 'install common packages'
   apt:
-    name: 'git'
+    name: '{{ item.name }}'
     state: 'present'
+  with_items:
+    - {name: git}
+    - {name: fail2ban}
+    - {name: libjemalloc-dev}
+    - {name: libreadline-dev}
+    - {name: zlib1g-dev}
+    - {name: build-essential}
+    - {name: gcc}
+    - {name: libssl-dev}
 
 - include: fail2ban.yml
 

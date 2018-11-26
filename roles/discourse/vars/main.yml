@@ -1,0 +1,3 @@
+---
+nginx_servername: 'ask.buildandtell.xyz'
+discourse_location: '/var/discourse/'

@@ -1,8 +1,4 @@
 ---
-- name: 'install fail2ban'
-  apt:
-    name: 'fail2ban'
-    state: 'present'
 
 - name: 'copy fail2ban config'
   copy:

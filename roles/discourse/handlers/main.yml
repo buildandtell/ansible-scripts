@@ -1,0 +1,38 @@
+---
+- name: stop discourse
+  command: ./launcher stop app
+  args:
+    chdir: "{{ discourse_location }}"
+  ignore_errors: yes
+
+- name: start discourse
+  command: ./launcher start app
+  args:
+    chdir: "{{ discourse_location }}"
+  ignore_errors: yes
+
+- name: restart discourse
+  command: ./launcher restart app
+  args:
+    chdir: "{{ discourse_location }}"
+  ignore_errors: yes
+
+- name: rebuild discourse
+  command: ./launcher rebuild app
+  args:
+    chdir: "{{ discourse_location }}"
+  ignore_errors: yes
+
+- name: bootstrap discourse
+  command: ./launcher bootstrap app
+  args:
+    chdir: "{{ discourse_location }}"
+
+- name: reload nginx
+  command: nginx -t
+  notify: perform nginx reload
+
+- name: perform nginx reload
+  service:
+    name: nginx
+    state: reloaded
